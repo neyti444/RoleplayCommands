@@ -1,0 +1,32 @@
+# RU перевод
+
+# Переменные
+# {player} – ник игрока
+# {message} – сообщение игрока
+# {rollNumber} – выпавшее число /roll
+# {defaultMinNumber}- минимальное число по умолчанию /roll
+# {defaultMaxNumber} – максимальное число по умолчанию /roll
+# {minNumber} – минимальное число введённое игроком при расширенной функции /roll
+# {maxNumber} – максимальное число введённое игроком при расширенной функции /roll
+# {messageOne} - первое сообщение /todo
+# {messageTwo} - второе сообщение /todo
+
+# В сообщениях можно использовать & и HEX(1.16+)
+# Например: &#FB0000HELLO
+
+messages:
+  me: "&d{player} {message}"
+  do: "&3{message} ({player})"
+  try:
+    success: "{player} {message} &a(удачно)"
+    failure: "{player} {message} &c(неудачно)"
+  roll:
+    default: "&7((У {player} выпадает {rollNumber}. [ {defaultMinNumber} – {defaultMaxNumber} ]))"
+    extended: "&7((У {player} выпадает {rollNumber}. [ {minNumber} – {maxNumber} ]))"
+  todo: "{messageOne} - сказал {player}, {messageTwo}"
+  whisper: "&7{player} шепчет: {message}"
+  shout: "&e{player} кричит: {message}"
+  no_arguments: "&cЭта команда требует аргументов."
+  no_permission: "&cУ вас нет разрешения на использование этой команды."
+  invalid_number: "&cНедопустимое значение."
+  reload: "&aКонфигурация перезагружена"

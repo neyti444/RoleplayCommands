@@ -1,0 +1,76 @@
+name: ExeRpCommands
+version: '1.1b'
+main: me.neyti.exerpcommands.ExeRpCommands
+author: 'Neyti'
+description: 'A simple roleplay commands plugin'
+api-version: 1.16.1
+
+commands:
+  me:
+    description: 'Roleplay /me command'
+    usage: '/me <text>'
+    permission: 'exerpcommands.me'
+    permission-message: '&cYou do not have permission to use this command.'
+  do:
+    description: 'Roleplay /do command'
+    usage: '/do <text>'
+    permission: 'exerpcommands.do'
+    permission-message: '&cYou do not have permission to use this command.'
+  try:
+    description: 'Roleplay /try command'
+    usage: '/try <text>'
+    permission: 'exerpcommands.try'
+    permission-message: '&cYou do not have permission to use this command.'
+  roll:
+    description: 'Random roll command'
+    usage: '/roll [min] [max]'
+    permission: 'exerpcommands.roll'
+    permission-message: '&cYou do not have permission to use this command.'
+  todo:
+    description: 'Roleplay /todo command'
+    usage: '/todo <text>*<text>'
+    permission: 'exerpcommands.todo'
+    permission-message: '&cYou do not have permission to use this command.'
+  w:
+    aliases: [whisper]
+    description: 'Whisper command'
+    usage: '/w <text>'
+    permission: 'exerpcommands.whisper'
+    permission-message: '&cYou do not have permission to use this command.'
+  s:
+    aliases: [shout]
+    description: 'Shout command'
+    usage: '/s <text>'
+    permission: 'exerpcommands.shout'
+    permission-message: '&cYou do not have permission to use this command.'
+  erpc:
+    description: 'ExeRpCommands main command'
+    usage: '/erpc reload'
+    permission: 'exerpcommands.reload'
+    permission-message: '&cYou do not have permission to use this command.'
+
+permissions:
+  exerpcommands.me:
+    description: 'Allows usage of /me'
+    default: true
+  exerpcommands.do:
+    description: 'Allows usage of /do'
+    default: true
+  exerpcommands.try:
+    description: 'Allows usage of /try'
+    default: true
+  exerpcommands.roll:
+    description: 'Allows usage of /roll'
+    default: true
+  exerpcommands.todo:
+    description: 'Allows usage of /todo'
+    default: true
+  exerpcommands.whisper:
+    description: 'Allows usage of /w or /whisper'
+    default: true
+  exerpcommands.shout:
+    description: 'Allows usage of /s or /shout'
+    default: true
+  exerpcommands.reload:
+    description: 'Allows usage of /erpc reload'
+    default: op
