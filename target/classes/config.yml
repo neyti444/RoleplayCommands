@@ -1,0 +1,68 @@
+# ExeRpCommands — configuration
+# Do not change this version!
+config-version: 4
+
+# Rendering
+hex-colors-enable: true
+
+# Language: en or ru
+language: en
+
+# Permissions:
+permissions:
+  enable: false
+
+commands:
+  me:
+    enable: true
+    permission: ""
+    global: false
+    radius: 100
+  do:
+    enable: true
+    permission: ""
+    global: false
+    radius: 100
+  try:
+    enable: true
+    permission: ""
+    global: false
+    radius: 100
+  roll:
+    enable: true
+    permission: ""
+    global: false
+    radius: 100
+    allow-custom-range: true
+    default-min-number: 0
+    default-max-number: 100
+  todo:
+    enable: true
+    permission: ""
+    global: false
+    radius: 100
+  whisper:
+    enable: true
+    permission: ""
+    global: false
+    radius: 5
+  shout:
+    enable: true
+    permission: ""
+    global: false
+    radius: 150
+  n:
+    enable: true
+    permission: ""
+    global: false
+    radius: 100
+  coin:
+    enable: true
+    permission: ""
+    global: false
+    radius: 100
+  dice:
+    enable: true
+    permission: ""
+    global: false
+    radius: 100
