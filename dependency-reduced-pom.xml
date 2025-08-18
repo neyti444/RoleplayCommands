@@ -22,7 +22,7 @@
           <relocations>
             <relocation>
               <pattern>org.bstats</pattern>
-              <shadedPattern>me.neyti.exerpcommands</shadedPattern>
+              <shadedPattern>me.neyti.roleplaycommands</shadedPattern>
             </relocation>
           </relocations>
         </configuration>

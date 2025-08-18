@@ -38,8 +38,7 @@ commands:
   dice:
     description: Roll a dice (d6)
     usage: /<command>
-  rc:
-    aliases: [roleplaycommands]
+  erpc:
     description: Admin command
     usage: /<command> reload
 

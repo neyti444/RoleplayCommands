@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.neyti</groupId>
-    <artifactId>ExeRpCommands</artifactId>
+    <artifactId>RoleplayCommands</artifactId>
     <version>1.2</version>
     <packaging>jar</packaging>
 
-    <name>ExeRpCommands</name>
+    <name>Roleplay Commands</name>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -50,7 +50,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>org.bstats</pattern>
-                                    <shadedPattern>me.neyti.exerpcommands.libs.bstats</shadedPattern>
+                                    <shadedPattern>me.neyti.roleplaycommands.libs.bstats</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
