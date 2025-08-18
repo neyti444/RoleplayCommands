@@ -1,22 +1,25 @@
 # RU перевод
-
-# Переменные
+#
+# Переменные:
 # {player} – ник игрока
 # {message} – сообщение игрока
 # {rollNumber} – выпавшее число /roll
-# {defaultMinNumber}- минимальное число по умолчанию /roll
+# {defaultMinNumber} – минимальное число по умолчанию /roll
 # {defaultMaxNumber} – максимальное число по умолчанию /roll
-# {minNumber} – минимальное число введённое игроком при расширенной функции /roll
-# {maxNumber} – максимальное число введённое игроком при расширенной функции /roll
-# {messageOne} - первое сообщение /todo
-# {messageTwo} - второе сообщение /todo
+# {minNumber} – минимум /roll (расшир.)
+# {maxNumber} – максимум /roll (расшир.)
+# {messageOne} – первое сообщение /todo
+# {messageTwo} – второе сообщение /todo
+# {diceNumber} – число из /dice
+#
+# Поддерживаются & и HEX (1.16+), напр.: &#FB0000HELLO
 
-# В сообщениях можно использовать & и HEX(1.16+)
-# Например: &#FB0000HELLO
+lang-version: 2
 
 messages:
   me: "&d{player} {message}"
   do: "&3{message} ({player})"
+  n: "&7{player}: {message}"
   try:
     success: "{player} {message} &a(удачно)"
     failure: "{player} {message} &c(неудачно)"
@@ -26,7 +29,16 @@ messages:
   todo: "{messageOne} - сказал {player}, {messageTwo}"
   whisper: "&7{player} шепчет: {message}"
   shout: "&e{player} кричит: {message}"
+  coin:
+    heads: "&7{player} подбросил монету: &aОрёл"
+    tails: "&7{player} подбросил монету: &cРешка"
+  dice: "&7{player} бросил кость: &e{diceNumber}"
+
+  # системные
+  players_only: "&cТолько для игроков."
+  command_disabled: "&cЭта команда отключена в конфиге."
+  no_permission: "&cУ вас нет разрешения &7({permission})&c."
   no_arguments: "&cЭта команда требует аргументов."
-  no_permission: "&cУ вас нет разрешения на использование этой команды."
   invalid_number: "&cНедопустимое значение."
-  reload: "&aКонфигурация перезагружена"
+  reloaded: "&aКонфигурация и языки перезагружены."
+  usage_erpc: "&eИспользование: /erpc reload"

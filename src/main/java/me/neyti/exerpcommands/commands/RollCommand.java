@@ -1,97 +1,63 @@
 package me.neyti.exerpcommands.commands;
 
 import me.neyti.exerpcommands.ExeRpCommands;
-import me.neyti.exerpcommands.utils.ChatUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class RollCommand implements CommandExecutor {
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
-    private final ExeRpCommands plugin;
+public class RollCommand extends AbstractMessageCommand {
 
-    public RollCommand(ExeRpCommands plugin) {
-        this.plugin = plugin;
-    }
+    public RollCommand(ExeRpCommands plugin) { super(plugin); }
+
+    @Override protected String commandKey() { return "roll"; }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            ChatUtil.sendMessage(plugin, sender, "Players only.");
-            return true;
-        }
-        Player player = (Player) sender;
+    protected boolean executeFor(Player player, String[] args, int commandRadius) {
+        final int defMin = plugin.getSettings().roll.defaultMin;
+        final int defMax = plugin.getSettings().roll.defaultMax;
 
-        // Проверка включенности команды
-        if (!plugin.getConfigManager().isCommandEnabled("roll")) {
-            ChatUtil.sendMessage(plugin, player, "&cThis command is disabled in the config.");
-            return true;
-        }
+        int min = defMin, max = defMax;
+        boolean extendedUsed = false;
+        boolean global = plugin.getSettings().commands.me.global;
 
-        // Проверка прав, если включено
-        if (plugin.getConfigManager().isPermissionsEnabled()) {
-            if (!player.hasPermission("exerpcommands.roll")) {
-                String noPerm = plugin.getLanguageManager().getMessage("no_permission");
-                ChatUtil.sendMessage(plugin, player, noPerm);
-                return true;
-            }
-        }
-
-        // Получаем настройки из config.yml
-        int defaultMin = plugin.getConfigManager().getRollDefaultMin();
-        int defaultMax = plugin.getConfigManager().getRollDefaultMax();
-        boolean extendedEnable = plugin.getConfigManager().isRollExtended();
-
-        int minRange = defaultMin;
-        int maxRange = defaultMax;
-        boolean isExtendedUsed = false;
-
-        // Если включена расширенная функция и указаны оба параметра
-        if (extendedEnable && args.length == 2) {
+        if (plugin.getSettings().roll.allowCustomRange && args.length == 2) {
+            // быстрая валидация без лишних объектов
             try {
-                minRange = Integer.parseInt(args[0]);
-                maxRange = Integer.parseInt(args[1]);
-                isExtendedUsed = true;
-            } catch (NumberFormatException e) {
-                String invNum = plugin.getLanguageManager().getMessage("invalid_number");
-                ChatUtil.sendMessage(plugin, player, invNum);
-                return true;
-            }
-            if (minRange > maxRange) {
-                String invNum = plugin.getLanguageManager().getMessage("invalid_number");
-                ChatUtil.sendMessage(plugin, player, invNum);
+                min = Integer.parseInt(args[0]);
+                max = Integer.parseInt(args[1]);
+                extendedUsed = true;
+            } catch (NumberFormatException ex) {
+                plugin.getChatService().sendTemplate(player, plugin.getMessages().INVALID_NUMBER, java.util.Collections.emptyMap(), player);
                 return true;
             }
         }
 
-        // Генерируем случайное число в диапазоне
-        int rollNumber = (int) (Math.random() * (maxRange - minRange + 1)) + minRange;
+        if (min > max) {
+            plugin.getChatService().sendTemplate(player, plugin.getMessages().INVALID_NUMBER, java.util.Collections.emptyMap(), player);
+            return true;
+        }
 
-        String formatKey = isExtendedUsed ? "roll.extended" : "roll.default";
-        String format = plugin.getLanguageManager().getMessage(formatKey);
-        format = format.replace("{player}", player.getName())
-                .replace("{rollNumber}", String.valueOf(rollNumber))
-                .replace("{defaultMinNumber}", String.valueOf(defaultMin))
-                .replace("{defaultMaxNumber}", String.valueOf(defaultMax))
-                .replace("{minNumber}", String.valueOf(minRange))
-                .replace("{maxNumber}", String.valueOf(maxRange));
+        int rolled = ThreadLocalRandom.current().nextInt(min, max + 1);
 
-        // Отправка сообщения по радиусу или всем
-        if (plugin.getConfigManager().isRadiusEnabled()) {
-            int radius = plugin.getConfigManager().getCommandRadius("roll");
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if (p.getWorld().equals(player.getWorld())
-                        && p.getLocation().distance(player.getLocation()) <= radius) {
-                    ChatUtil.sendMessage(plugin, p, format);
-                }
-            }
+        Map<String, String> ph = phPlayer(player);
+        ph.put("rollNumber", Integer.toString(rolled));
+
+        if (extendedUsed) {
+            ph.put("minNumber", Integer.toString(min));
+            ph.put("maxNumber", Integer.toString(max));
+            plugin.getAudienceService().sendToAudience(player, commandRadius, global, p ->
+                    plugin.getChatService().sendTemplate(p, plugin.getMessages().ROLL_EXTENDED, ph, player)
+            );
         } else {
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                ChatUtil.sendMessage(plugin, p, format);
-            }
+            ph.put("defaultMinNumber", Integer.toString(defMin));
+            ph.put("defaultMaxNumber", Integer.toString(defMax));
+            plugin.getAudienceService().sendToAudience(player, commandRadius, global, p ->
+                    plugin.getChatService().sendTemplate(p, plugin.getMessages().ROLL_DEFAULT, ph, player)
+            );
         }
+
         return true;
     }
 }
