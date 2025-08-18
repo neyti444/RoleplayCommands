@@ -1,44 +1,68 @@
+# ExeRpCommands — configuration
 # Do not change this version!
-config-version: 2
+config-version: 4
 
-# If true, messages will only be sent to players in radius.
-# If false, everyone sees them regardless of distance.
-radius-messages-enable: true
-
-# If true, plugin checks permissions for each command usage
-# If false, no permission checks are performed (besides OP for /erpc reload)
-permissions-enable: false
-
-# If true — &#RRGGBB as HEX color (1.16+)
+# Rendering
 hex-colors-enable: true
 
 # Language: en or ru
 language: en
 
+# Permissions:
+permissions:
+  enable: false
+
 commands:
   me:
-    command-enable: true
+    enable: true
+    permission: ""
+    global: false
     radius: 100
   do:
-    command-enable: true
+    enable: true
+    permission: ""
+    global: false
     radius: 100
   try:
-    command-enable: true
+    enable: true
+    permission: ""
+    global: false
     radius: 100
   roll:
-    command-enable: true
+    enable: true
+    permission: ""
+    global: false
     radius: 100
-    # allow specifying roll [min] [max]
-    extended-enable: true
-    # default roll range
-    default-max-number: 100
+    allow-custom-range: true
     default-min-number: 0
+    default-max-number: 100
   todo:
-    command-enable: true
+    enable: true
+    permission: ""
+    global: false
     radius: 100
   whisper:
-    command-enable: true
+    enable: true
+    permission: ""
+    global: false
     radius: 5
   shout:
-    command-enable: true
+    enable: true
+    permission: ""
+    global: false
     radius: 150
+  n:
+    enable: true
+    permission: ""
+    global: false
+    radius: 100
+  coin:
+    enable: true
+    permission: ""
+    global: false
+    radius: 100
+  dice:
+    enable: true
+    permission: ""
+    global: false
+    radius: 100

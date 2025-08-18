@@ -4,7 +4,7 @@
   <groupId>me.neyti</groupId>
   <artifactId>ExeRpCommands</artifactId>
   <name>ExeRpCommands</name>
-  <version>1.1b</version>
+  <version>1.2</version>
   <build>
     <plugins>
       <plugin>

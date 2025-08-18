@@ -1,8 +1,12 @@
 package me.neyti.exerpcommands.managers;
 
 import me.neyti.exerpcommands.ExeRpCommands;
+import me.neyti.exerpcommands.util.ConfigMigrator;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class ConfigManager {
 
@@ -10,42 +14,31 @@ public class ConfigManager {
 
     public ConfigManager(ExeRpCommands plugin) {
         this.plugin = plugin;
-        plugin.saveDefaultConfig(); // Копирует config.yml из ресурсов, если он отсутствует
+        plugin.saveDefaultConfig();
     }
 
-    public void reload() {
+    /** reload → миграции → копирование дефолтов → save */
+    public void reloadAndMigrate() {
         plugin.reloadConfig();
-    }
+        FileConfiguration cfg = plugin.getConfig();
 
-    public boolean isCommandEnabled(String command) {
-        return plugin.getConfig().getBoolean("commands." + command + ".command-enable", false);
-    }
+        YamlConfiguration defaults = YamlConfiguration.loadConfiguration(
+                new InputStreamReader(plugin.getResource("config.yml"), StandardCharsets.UTF_8)
+        );
 
-    public boolean isPermissionsEnabled() {
-        return plugin.getConfig().getBoolean("permissions-enable", false);
-    }
+        boolean migrated = ConfigMigrator.migrate(plugin, cfg, defaults);
 
-    public boolean isRadiusEnabled() {
-        return plugin.getConfig().getBoolean("radius-messages-enable", false);
-    }
+        // подставляем недостающие ключи из нового дефолтного файла
+        cfg.setDefaults(defaults);
+        cfg.options().copyDefaults(true);
 
-    public int getCommandRadius(String command) {
-        return plugin.getConfig().getInt("commands." + command + ".radius", 100);
-    }
+        int target = defaults.getInt("config-version", 3);
+        if (cfg.getInt("config-version", 3) != target) {
+            cfg.set("config-version", target);
+            migrated = true;
+        }
 
-    public boolean isRollExtended() {
-        return plugin.getConfig().getBoolean("commands.roll.extended-enable", false);
-    }
-
-    public int getRollDefaultMin() {
-        return plugin.getConfig().getInt("commands.roll.default-min-number", 1);
-    }
-
-    public int getRollDefaultMax() {
-        return plugin.getConfig().getInt("commands.roll.default-max-number", 100);
-    }
-
-    public boolean isHexEnabled() {
-        return plugin.getConfig().getBoolean("hex-colors-enable", false);
+        if (migrated) plugin.getLogger().info("[Config] Migration applied. Saving updated config.yml");
+        plugin.saveConfig();
     }
 }

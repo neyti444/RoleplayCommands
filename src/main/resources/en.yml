@@ -1,32 +1,44 @@
 # EN translation
-
+#
 # Variables:
-# {player} – player's nickname
-# {message} – player's message
+# {player} – player name
+# {message} – player message
 # {rollNumber} – rolled number /roll
-# {defaultMinNumber} – default minimum number /roll
-# {defaultMaxNumber} – default maximum number /roll
-# {minNumber} – minimum number entered by the player in the extended function /roll
-# {maxNumber} – maximum number entered by the player in the extended function /roll
-# {messageOne} - first message /todo
-# {messageOne} - second message /todo
+# {defaultMinNumber} – default minimum /roll
+# {defaultMaxNumber} – default maximum /roll
+# {minNumber} – min in extended /roll
+# {maxNumber} – max in extended /roll
+# {messageOne} – first part /todo
+# {messageTwo} – second part /todo
+# {diceNumber} – number from /dice
+#
+# Supports &-colors and HEX (1.16+), e.g. &#FB0000HELLO
 
-# In messages, you can use & and HEX (1.16+)
-# For example: &#FB0000HELLO
+lang-version: 2
 
 messages:
   me: "&d{player} {message}"
   do: "&3{message} ({player})"
+  n: "&7{player}: {message}"
   try:
     success: "{player} {message} &a(success)"
-    failure: "{player} {message} &c(fail)"
+    failure: "{player} {message} &c(failure)"
   roll:
     default: "&7(({player} rolled {rollNumber}. [ {defaultMinNumber} – {defaultMaxNumber} ]))"
     extended: "&7(({player} rolled {rollNumber}. [ {minNumber} – {maxNumber} ]))"
   todo: "{messageOne} - said {player}, {messageTwo}"
   whisper: "&7{player} whispers: {message}"
   shout: "&e{player} shouts: {message}"
-  no_arguments: "&cThis command requires arguments."
-  no_permission: "&cYou do not have permission to use this command."
-  invalid_number: "&cInvalid number."
-  reload: "&aConfiguration reloaded"
+  coin:
+    heads: "&7{player} flipped a coin: &aHeads"
+    tails: "&7{player} flipped a coin: &cTails"
+  dice: "&7{player} rolled a dice: &e{diceNumber}"
+
+  # system
+  players_only: "&cPlayers only."
+  command_disabled: "&cThis command is disabled in the config."
+  no_permission: "&cYou don't have permission &7({permission})&c."
+  no_arguments: "&cYou must provide arguments."
+  invalid_number: "&cInvalid number or range."
+  reloaded: "&aConfiguration and languages reloaded."
+  usage_erpc: "&eUsage: /erpc reload"
