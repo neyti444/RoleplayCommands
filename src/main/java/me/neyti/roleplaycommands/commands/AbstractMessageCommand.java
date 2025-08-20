@@ -5,13 +5,15 @@ import me.neyti.roleplaycommands.model.Settings;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractMessageCommand implements CommandExecutor {
+public abstract class AbstractMessageCommand implements TabExecutor {
 
     protected final RoleplayCommands plugin;
 
@@ -21,7 +23,7 @@ public abstract class AbstractMessageCommand implements CommandExecutor {
 
     protected abstract String commandKey();
 
-    protected abstract boolean executeFor(Player player, String[] args, int commandRadius);
+    protected abstract boolean executeFor(Player player, String[] args, int commandRadius, boolean global);
 
     @Override
     public final boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -48,7 +50,7 @@ public abstract class AbstractMessageCommand implements CommandExecutor {
             }
         }
 
-        return executeFor(player, args, conf.radius);
+        return executeFor(player, args, conf.radius, conf.global);
     }
 
     protected static String joinArgs(String[] args) {
@@ -61,6 +63,10 @@ public abstract class AbstractMessageCommand implements CommandExecutor {
             sb.append(args[i]);
         }
         return sb.toString();
+    }
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return Collections.emptyList();
     }
 
     protected static Map<String, String> phPlayer(Player p) {

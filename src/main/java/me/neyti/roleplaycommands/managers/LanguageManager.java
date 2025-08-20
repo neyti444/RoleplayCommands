@@ -4,7 +4,6 @@ import me.neyti.roleplaycommands.RoleplayCommands;
 import me.neyti.roleplaycommands.model.Messages;
 import me.neyti.roleplaycommands.model.Settings;
 import me.neyti.roleplaycommands.util.Formatting;
-import me.neyti.roleplaycommands.util.LanguageMigrator;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -25,12 +24,6 @@ public class LanguageManager {
         ensureLanguageFiles();
 
         String code = settings.languageCode == null ? "en" : settings.languageCode.trim();
-
-        LanguageMigrator.migrate(plugin, "ru");
-        LanguageMigrator.migrate(plugin, "en");
-        if (!"ru".equalsIgnoreCase(code) && !"en".equalsIgnoreCase(code)) {
-            LanguageMigrator.migrate(plugin, code);
-        }
 
         File langFile = new File(plugin.getDataFolder(), code + ".yml");
         if (!langFile.exists()) {

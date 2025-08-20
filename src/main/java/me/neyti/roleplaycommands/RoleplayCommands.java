@@ -6,6 +6,7 @@ import me.neyti.roleplaycommands.listeners.CommandSendListener;
 import me.neyti.roleplaycommands.managers.ConfigManager;
 import me.neyti.roleplaycommands.managers.LanguageManager;
 import me.neyti.roleplaycommands.model.Settings;
+import me.neyti.roleplaycommands.platform.SchedulerAdapter;
 import me.neyti.roleplaycommands.services.AudienceService;
 import me.neyti.roleplaycommands.services.ChatService;
 import me.neyti.roleplaycommands.util.CommandRegistry;
@@ -27,9 +28,11 @@ public class RoleplayCommands extends JavaPlugin {
     private ChatService chatService;
     private AudienceService audienceService;
     private CommandRegistry commandRegistry;
+    private SchedulerAdapter scheduler;
 
     @Override
     public void onEnable() {
+        this.scheduler = new SchedulerAdapter(this);
         this.configManager = new ConfigManager(this);
         this.languageManager = new LanguageManager(this);
         this.chatService = new ChatService(this);
@@ -58,12 +61,13 @@ public class RoleplayCommands extends JavaPlugin {
 
         applyCommandVisibility();
 
-        try { new Metrics(this, 24427); } catch (Throwable ignored) {}
+        try { new Metrics(this, 26978); } catch (Throwable ignored) {}
         getLogger().info(() -> "[" + getName() + "] Enabled v" + getDescription().getVersion());
     }
 
     @Override
     public void onDisable() {
+        this.scheduler = null;
         getLogger().info(() -> "[" + getName() + "] Disabled");
     }
 
@@ -101,7 +105,7 @@ public class RoleplayCommands extends JavaPlugin {
         if (settings.commands.roll.enable) enabled.add("roll");
         if (settings.commands.todo.enable) enabled.add("todo");
         if (settings.commands.whisper.enable) enabled.add("whisper");
-        if (settings.commands.shout.enable)    enabled.add("shout");
+        if (settings.commands.shout.enable)   enabled.add("shout");
         if (settings.commands.n.enable)       enabled.add("n");
         if (settings.commands.coin.enable)    enabled.add("coin");
         if (settings.commands.dice.enable)    enabled.add("dice");
@@ -109,6 +113,7 @@ public class RoleplayCommands extends JavaPlugin {
         commandRegistry.applyVisibility(enabled);
     }
 
+    public SchedulerAdapter scheduler() { return scheduler; }
     public ConfigManager getConfigManager() { return configManager; }
     public LanguageManager getLanguageManager() { return languageManager; }
 

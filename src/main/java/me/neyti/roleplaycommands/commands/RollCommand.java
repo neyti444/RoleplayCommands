@@ -13,13 +13,12 @@ public class RollCommand extends AbstractMessageCommand {
     @Override protected String commandKey() { return "roll"; }
 
     @Override
-    protected boolean executeFor(Player player, String[] args, int commandRadius) {
+    protected boolean executeFor(Player player, String[] args, int commandRadius, boolean global) {
         final int defMin = plugin.getSettings().roll.defaultMin;
         final int defMax = plugin.getSettings().roll.defaultMax;
 
         int min = defMin, max = defMax;
         boolean extendedUsed = false;
-        boolean global = plugin.getSettings().commands.me.global;
 
         if (plugin.getSettings().roll.allowCustomRange && args.length == 2) {
             try {

@@ -42,7 +42,7 @@ public final class Formatting {
     }
 
     private static boolean isModern() {
-        String v = Bukkit.getBukkitVersion(); // "1.20.6-R0.1-SNAPSHOT"
+        String v = Bukkit.getBukkitVersion();
         return !(v.startsWith("1.7") || v.startsWith("1.8") || v.startsWith("1.9") ||
                 v.startsWith("1.10") || v.startsWith("1.11") || v.startsWith("1.12") ||
                 v.startsWith("1.13") || v.startsWith("1.14") || v.startsWith("1.15"));

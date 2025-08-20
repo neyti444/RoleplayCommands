@@ -38,13 +38,20 @@ public final class CommandRegistry {
         if (known == null) return;
 
         for (String label : LABELS) {
-            if (!enabledLabels.contains(label)) {
-                removeKey(known, label);
-                removeKey(known, namespaced(label));
+            if (enabledLabels.contains(label)) continue;
+            PluginCommand ours = originals.get(label);
+            if (ours == null) continue;
+
+            removeIfPointsTo(known, label,    ours);
+            removeIfPointsTo(known, ns(label), ours);
+
+            for (String alias : safeAliases(ours)) {
+                removeIfPointsTo(known, alias,      ours);
+                removeIfPointsTo(known, ns(alias),  ours);
             }
         }
 
-        String ns = fallbackPrefix();
+        String prefix = fallbackPrefix();
         for (String label : LABELS) {
             if (!enabledLabels.contains(label)) continue;
             PluginCommand ours = originals.get(label);
@@ -52,9 +59,10 @@ public final class CommandRegistry {
 
             Command current = known.get(label);
             if (current != ours) {
-                removeKey(known, label);
-                removeKey(known, ns + ":" + label);
-                map.register(ns, ours);
+                known.remove(label);
+                removeIfPointsTo(known, prefix + ":" + label, ours);
+
+                map.register(prefix, ours);
             }
         }
 
@@ -78,9 +86,7 @@ public final class CommandRegistry {
             f.setAccessible(true);
             Object obj = f.get(map);
             if (obj instanceof Map) {
-                Map<String, Command> snapshot = new LinkedHashMap<>((Map<String, Command>) obj);
-                f.set(map, snapshot);
-                return snapshot;
+                return (Map<String, Command>) obj;
             }
         } catch (Throwable ignored) {}
         return null;
@@ -91,27 +97,25 @@ public final class CommandRegistry {
         return raw.replaceAll("[^a-z0-9_\\-]+", "");
     }
 
-    private String namespaced(String label) {
+    private String ns(String label) {
         return fallbackPrefix() + ":" + label;
     }
 
-    private void removeKey(Map<String, Command> known, String key) {
-        if (key == null) return;
-        Command cmd = known.remove(key);
-        if (cmd == null) return;
-
-        List<String> aliases = new ArrayList<>();
+    private static List<String> safeAliases(Command cmd) {
         try {
-            Method getAliases = Command.class.getMethod("getAliases");
-            Object res = getAliases.invoke(cmd);
-            if (res instanceof List) {
-                aliases.addAll(((List<?>) res).stream().map(String::valueOf).collect(Collectors.toList()));
-            }
-        } catch (Throwable ignored) {}
+            List<String> a = cmd.getAliases();
+            if (a == null || a.isEmpty()) return Collections.emptyList();
+            return a.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        } catch (Throwable t) {
+            return Collections.emptyList();
+        }
+    }
 
-        for (String alias : aliases) {
-            known.remove(alias);
-            known.remove(fallbackPrefix() + ":" + alias);
+    private static void removeIfPointsTo(Map<String, Command> known, String key, Command target) {
+        if (key == null) return;
+        Command current = known.get(key);
+        if (current == target) {
+            known.remove(key);
         }
     }
 

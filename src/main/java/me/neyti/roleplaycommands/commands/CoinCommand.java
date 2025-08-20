@@ -13,7 +13,7 @@ public class CoinCommand extends AbstractMessageCommand {
     @Override protected String commandKey() { return "coin"; }
 
     @Override
-    protected boolean executeFor(Player player, String[] args, int commandRadius) {
+    protected boolean executeFor(Player player, String[] args, int commandRadius, boolean global) {
         boolean heads = ThreadLocalRandom.current().nextBoolean();
 
         Map<String, String> ph = phPlayer(player);
@@ -21,7 +21,6 @@ public class CoinCommand extends AbstractMessageCommand {
 
         final String template = heads ? plugin.getMessages().COIN_HEADS : plugin.getMessages().COIN_TAILS;
 
-        boolean global = plugin.getSettings().commands.me.global;
         plugin.getAudienceService().sendToAudience(player, commandRadius, global,p ->
                 plugin.getChatService().sendTemplate(p, template, ph, player)
         );

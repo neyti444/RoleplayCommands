@@ -1,6 +1,6 @@
 # ExeRpCommands — configuration
 # Do not change this version!
-config-version: 4
+config-version: 1
 
 # Rendering
 hex-colors-enable: true
@@ -15,22 +15,22 @@ permissions:
 commands:
   me:
     enable: true
-    permission: ""
+    permission: "roleplaycommands.me"
     global: false
     radius: 100
   do:
     enable: true
-    permission: ""
+    permission: "roleplaycommands.do"
     global: false
     radius: 100
   try:
     enable: true
-    permission: ""
+    permission: "roleplaycommands.try"
     global: false
     radius: 100
   roll:
     enable: true
-    permission: ""
+    permission: "roleplaycommands.roll"
     global: false
     radius: 100
     allow-custom-range: true
@@ -38,31 +38,31 @@ commands:
     default-max-number: 100
   todo:
     enable: true
-    permission: ""
+    permission: "roleplaycommands.todo"
     global: false
     radius: 100
   whisper:
     enable: true
-    permission: ""
+    permission: "roleplaycommands.whisper"
     global: false
     radius: 5
   shout:
     enable: true
-    permission: ""
+    permission: "roleplaycommands.shout"
     global: false
     radius: 150
   n:
     enable: true
-    permission: ""
+    permission: "roleplaycommands.n"
     global: false
     radius: 100
   coin:
     enable: true
-    permission: ""
+    permission: "roleplaycommands.coin"
     global: false
     radius: 100
   dice:
     enable: true
-    permission: ""
+    permission: "roleplaycommands.dice"
     global: false
     radius: 100

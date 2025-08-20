@@ -9,13 +9,6 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-/**
- * Рассылка сообщений адресатам.
- * Теперь НЕТ глобального свитча radius.enable – решает КАЖДАЯ команда:
- *   - global == true  -> всем онлайн игрокам;
- *   - global == false -> по радиусу в том же мире.
- * Реализация Folia-safe: рассылка на треде каждой сущности через EntityScheduler.
- */
 public final class AudienceService {
 
     private final RoleplayCommands plugin;
@@ -23,7 +16,9 @@ public final class AudienceService {
 
     public AudienceService(RoleplayCommands plugin) {
         this.plugin = plugin;
-        this.scheduler = new SchedulerAdapter(plugin);
+        SchedulerAdapter fromMain = null;
+        try { fromMain = plugin.scheduler(); } catch (Throwable ignored) {}
+        this.scheduler = (fromMain != null) ? fromMain : new SchedulerAdapter(plugin);
     }
 
     public void sendToAudience(Player source, int radius, Consumer<Player> deliver) {
@@ -37,43 +32,26 @@ public final class AudienceService {
         }
         final int r = Math.max(0, radius);
 
-        if (!scheduler.isFoliaLike()) {
-            scheduler.runGlobal(() -> {
-                Location src = source.getLocation();
-                double r2 = (double) r * r;
-                for (Player p : src.getWorld().getPlayers()) {
-                    if (p.getLocation().distanceSquared(src) <= r2) {
+        scheduler.runOnEntity(source, () -> {
+            Location snap = source.getLocation().clone();
+            final UUID worldId = snap.getWorld().getUID();
+            final double sx = snap.getX(), sy = snap.getY(), sz = snap.getZ();
+            final double r2 = (double) r * r;
+
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                scheduler.runOnEntity(p, () -> {
+                    if (!p.getWorld().getUID().equals(worldId)) return;
+                    Location pl = p.getLocation();
+                    double dx = pl.getX() - sx, dy = pl.getY() - sy, dz = pl.getZ() - sz;
+                    if (dx*dx + dy*dy + dz*dz <= r2) {
                         deliver.accept(p);
                     }
-                }
-            });
-            return;
-        }
-
-        Location snap = source.getLocation().clone();
-        UUID worldId = snap.getWorld().getUID();
-        double sx = snap.getX(), sy = snap.getY(), sz = snap.getZ();
-        double r2 = (double) r * r;
-
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            scheduler.runOnEntity(p, () -> {
-                if (!p.getWorld().getUID().equals(worldId)) return;
-                Location pl = p.getLocation();
-                double dx = pl.getX() - sx, dy = pl.getY() - sy, dz = pl.getZ() - sz;
-                if (dx*dx + dy*dy + dz*dz <= r2) {
-                    deliver.accept(p);
-                }
-            }, null);
-        }
+                }, null);
+            }
+        }, null);
     }
 
     public void sendAll(Consumer<Player> deliver) {
-        if (!scheduler.isFoliaLike()) {
-            scheduler.runGlobal(() -> {
-                for (Player p : Bukkit.getOnlinePlayers()) deliver.accept(p);
-            });
-            return;
-        }
         for (Player p : Bukkit.getOnlinePlayers()) {
             scheduler.runOnEntity(p, () -> deliver.accept(p), null);
         }

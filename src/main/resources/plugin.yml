@@ -1,4 +1,4 @@
-name: Roleplay Commands
+name: RoleplayCommands
 version: '1.2'
 main: me.neyti.roleplaycommands.RoleplayCommands
 author: 'Neyti'
@@ -39,32 +39,42 @@ commands:
     description: Roll a dice (d6)
     usage: /<command>
   rc:
+    permission: op
     aliases: [roleplaycommands]
     description: Admin command
     usage: /<command> reload
 
 permissions:
-  exerpcommands.me:
+  roleplaycommands.me:
     description: 'Allows usage of /me'
-    default: true
-  exerpcommands.do:
+    default: op
+  roleplaycommands.do:
     description: 'Allows usage of /do'
-    default: true
-  exerpcommands.try:
+    default: op
+  roleplaycommands.try:
     description: 'Allows usage of /try'
-    default: true
-  exerpcommands.roll:
+    default: op
+  roleplaycommands.roll:
     description: 'Allows usage of /roll'
-    default: true
-  exerpcommands.todo:
+    default: op
+  roleplaycommands.todo:
     description: 'Allows usage of /todo'
-    default: true
-  exerpcommands.whisper:
+    default: op
+  roleplaycommands.whisper:
     description: 'Allows usage of /w or /whisper'
-    default: true
-  exerpcommands.shout:
+    default: op
+  roleplaycommands.shout:
     description: 'Allows usage of /s or /shout'
-    default: true
-  exerpcommands.reload:
-    description: 'Allows usage of /erpc reload'
+    default: op
+  roleplaycommands.coin:
+    description: 'Allows usage of /coin'
+    default: op
+  roleplaycommands.dice:
+    description: 'Allows usage of /dice'
+    default: op
+  roleplaycommands.n:
+    description: 'Allows usage of /n'
+    default: op
+  roleplaycommands.reload:
+    description: 'Allows usage of /rc reload'
     default: op

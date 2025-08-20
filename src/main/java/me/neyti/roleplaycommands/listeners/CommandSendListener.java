@@ -2,13 +2,9 @@ package me.neyti.roleplaycommands.listeners;
 
 import me.neyti.roleplaycommands.RoleplayCommands;
 import me.neyti.roleplaycommands.model.Settings;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandSendEvent;
-
-import java.util.Collection;
-import java.util.Locale;
 
 public final class CommandSendListener implements Listener {
 
@@ -23,23 +19,32 @@ public final class CommandSendListener implements Listener {
         final Settings s = plugin.getSettings();
         if (s == null) return;
 
-        final String ns = Bukkit.getName().toLowerCase(Locale.ROOT) + ":";
+        final boolean permsOn = s.permissionsEnabled;
 
-        maybeRemove(e.getCommands(), "me",      s.commands.me.enable,        ns);
-        maybeRemove(e.getCommands(), "do",      s.commands.doCmd.enable,     ns);
-        maybeRemove(e.getCommands(), "try",     s.commands.tryCmd.enable,    ns);
-        maybeRemove(e.getCommands(), "roll",    s.commands.roll.enable,      ns);
-        maybeRemove(e.getCommands(), "todo",    s.commands.todo.enable,      ns);
-        maybeRemove(e.getCommands(), "whisper", s.commands.whisper.enable,   ns);
-        maybeRemove(e.getCommands(), "shout",   s.commands.shout.enable,     ns);
-        maybeRemove(e.getCommands(), "n",       s.commands.n.enable,         ns);
-        maybeRemove(e.getCommands(), "coin",    s.commands.coin.enable,      ns);
-        maybeRemove(e.getCommands(), "dice",    s.commands.dice.enable,      ns);
-    }
+        java.util.function.BiConsumer<String, Settings.Command> filter = (label, conf) -> {
+            if (!conf.enable) {
+                e.getCommands().remove(label);
+                return;
+            }
+            if (permsOn) {
+                String node = (conf.permission != null && !conf.permission.trim().isEmpty())
+                        ? conf.permission.trim()
+                        : ("roleplaycommands." + conf.key);
+                if (!e.getPlayer().hasPermission(node)) {
+                    e.getCommands().remove(label);
+                }
+            }
+        };
 
-    private static void maybeRemove(Collection<String> cmds, String label, boolean enabled, String ns) {
-        if (enabled) return;
-        cmds.remove(label);
-        cmds.remove(ns + label);
+        filter.accept("me", s.commands.me);
+        filter.accept("do", s.commands.doCmd);
+        filter.accept("try", s.commands.tryCmd);
+        filter.accept("roll", s.commands.roll);
+        filter.accept("todo", s.commands.todo);
+        filter.accept("whisper", s.commands.whisper);
+        filter.accept("shout", s.commands.shout);
+        filter.accept("n", s.commands.n);
+        filter.accept("coin", s.commands.coin);
+        filter.accept("dice", s.commands.dice);
     }
 }

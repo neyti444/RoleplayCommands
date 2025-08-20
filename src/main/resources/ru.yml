@@ -12,33 +12,33 @@
 # {messageTwo} – второе сообщение /todo
 # {diceNumber} – число из /dice
 #
-# Поддерживаются & и HEX (1.16+), напр.: &#FB0000HELLO
+# Поддерживаются & и HEX (1.16+), напр.: #FB0000HELLO
 
-lang-version: 2
+lang-version: 1
 
 messages:
   me: "&d{player} {message}"
   do: "&3{message} ({player})"
-  n: "&7{player}: {message}"
+  n: "&7(( {player}: {message} ))"
   try:
     success: "{player} {message} &a(удачно)"
     failure: "{player} {message} &c(неудачно)"
   roll:
-    default: "&7((У {player} выпадает {rollNumber}. [ {defaultMinNumber} – {defaultMaxNumber} ]))"
-    extended: "&7((У {player} выпадает {rollNumber}. [ {minNumber} – {maxNumber} ]))"
+    default: "&7(( У {player} выпадает {rollNumber}. [ {defaultMinNumber} – {defaultMaxNumber} ] ))"
+    extended: "&7(( У {player} выпадает {rollNumber}. [ {minNumber} – {maxNumber} ] ))"
   todo: "{messageOne} - сказал {player}, {messageTwo}"
   whisper: "&7{player} шепчет: {message}"
   shout: "&e{player} кричит: {message}"
   coin:
-    heads: "&7{player} подбросил монету: &aОрёл"
-    tails: "&7{player} подбросил монету: &cРешка"
-  dice: "&7{player} бросил кость: &e{diceNumber}"
+    heads: "&7(({player} подбросил монету: &aОрёл &7))"
+    tails: "&7(({player} подбросил монету: &cРешка &7))"
+  dice: "&7(( {player} бросил кость: &e{diceNumber} &7))"
 
   # системные
   players_only: "&cТолько для игроков."
-  command_disabled: "&cЭта команда отключена в конфиге."
-  no_permission: "&cУ вас нет разрешения &7({permission})&c."
+  command_disabled: "&cЭта команда отключена."
+  no_permission: "&cУ вас нет разрешения."
   no_arguments: "&cЭта команда требует аргументов."
   invalid_number: "&cНедопустимое значение."
-  reloaded: "&aКонфигурация и языки перезагружены."
-  usage_erpc: "&eИспользование: /erpc reload"
+  reloaded: "&7[&bRC&7] &aКонфигурация перезагружена."
+  usage_erpc: "&eИспользование: /rc reload"

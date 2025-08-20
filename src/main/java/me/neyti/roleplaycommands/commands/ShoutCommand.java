@@ -12,7 +12,7 @@ public class ShoutCommand extends AbstractMessageCommand {
     @Override protected String commandKey() { return "shout"; }
 
     @Override
-    protected boolean executeFor(Player player, String[] args, int commandRadius) {
+    protected boolean executeFor(Player player, String[] args, int commandRadius, boolean global) {
         if (args.length == 0) {
             plugin.getChatService().sendTemplate(player, plugin.getMessages().NO_ARGUMENTS, java.util.Collections.emptyMap(), player);
             return true;
@@ -22,7 +22,6 @@ public class ShoutCommand extends AbstractMessageCommand {
         Map<String, String> ph = phPlayer(player);
         ph.put("message", message);
 
-        boolean global = plugin.getSettings().commands.me.global;
         plugin.getAudienceService().sendToAudience(player, commandRadius, global,p ->
                 plugin.getChatService().sendTemplate(p, plugin.getMessages().SHOUT, ph, player)
         );

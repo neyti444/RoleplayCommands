@@ -11,9 +11,11 @@ import java.util.Map;
 public class ChatService {
 
     private final RoleplayCommands plugin;
+    private final boolean hasPapi;
 
     public ChatService(RoleplayCommands plugin) {
         this.plugin = plugin;
+        this.hasPapi = (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null);
     }
 
     public void sendTemplate(CommandSender target, String precoloredTemplate, Map<String, String> placeholders, Player papiContext) {
@@ -28,8 +30,9 @@ public class ChatService {
                 out = out.replace("{" + e.getKey() + "}", e.getValue());
             }
         }
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            out = PlaceholderAPI.setPlaceholders(papiContext, out);
+        if (hasPapi) {
+            try { out = PlaceholderAPI.setPlaceholders(papiContext, out); }
+            catch (Throwable ignored) {}
         }
         return out;
     }
